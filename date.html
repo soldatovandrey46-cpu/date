@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Секретное приглашение ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            min-height: 100vh;
+            /* РОЗОВЫЙ ГРАДИЕНТ - нежный и романтичный */
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffdde1 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', 'Roboto', 'Dancing Script', cursive, sans-serif;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Розовые звёздочки (лёгкие и воздушные) */
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .star {
+            position: absolute;
+            background-color: #ffb7c5; /* розовые звёздочки */
+            border-radius: 50%;
+            opacity: 0.7;
+            animation: twinkle 2s infinite alternate;
+            box-shadow: 0 0 4px #ff90a0;
+        }
+
+        @keyframes twinkle {
+            0% { opacity: 0.2; transform: scale(1); background-color: #ffb7c5; }
+            100% { opacity: 1; transform: scale(1.3); background-color: #ffebf0; box-shadow: 0 0 8px #ffb7c5; }
+        }
+
+        .container {
+            background: rgba(255, 240, 245, 0.25);
+            backdrop-filter: blur(15px);
+            border-radius: 50px;
+            padding: 30px 25px;
+            width: 100%;
+            max-width: 580px;
+            text-align: center;
+            box-shadow: 0 30px 50px rgba(255, 80, 120, 0.25), 0 0 0 1px rgba(255, 220, 230, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s ease;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 2rem;
+            color: #a1324b;
+            margin-bottom: 15px;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-shadow: 0 2px 8px rgba(255, 255, 200, 0.6);
+        }
+
+        .heart-icon {
+            font-size: 70px;
+            animation: heartbeat 1.4s infinite;
+            display: inline-block;
+            margin-bottom: 5px;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.1));
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); text-shadow: 0 0 0 #ff8899; }
+            50% { transform: scale(1.2); text-shadow: 0 0 12px #ff4d6d; }
+            100% { transform: scale(1); text-shadow: 0 0 0 #ff8899; }
+        }
+
+        .message {
+            font-size: 1.2rem;
+            color: #6b2e44;
+            margin-bottom: 30px;
+            opacity: 0.95;
+            font-weight: 500;
+            background: rgba(255, 245, 245, 0.4);
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 60px;
+            backdrop-filter: blur(4px);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin: 20px 0 20px;
+        }
+
+        .time-block {
+            background: rgba(255, 215, 225, 0.6);
+            border-radius: 28px;
+            padding: 15px 10px;
+            min-width: 80px;
+            backdrop-filter: blur(6px);
+            box-shadow: 0 8px 20px rgba(210, 70, 100, 0.2);
+            border-bottom: 3px solid #ff99aa;
+        }
+
+        .time-number {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #b13e5c;
+            font-family: monospace;
+            letter-spacing: 2px;
+            text-shadow: 0 1px 2px white;
+        }
+
+        .time-label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            color: #771f3a;
+            margin-top: 5px;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        .secret-place {
+            margin-top: 30px;
+            background: rgba(255, 230, 240, 0.5);
+            border-radius: 60px;
+            padding: 18px;
+            transition: all 0.5s ease;
+            border: 1px dashed #ff8899;
+        }
+
+        .secret-place h3 {
+            color: #c53a60;
+            font-size: 1.4rem;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .place-details {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #4a1e2c;
+            background: rgba(255, 245, 240, 0.9);
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 60px;
+            backdrop-filter: blur(5px);
+            letter-spacing: 0.5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .locked {
+            filter: blur(7px);
+            user-select: none;
+            pointer-events: none;
+            background: rgba(200, 120, 140, 0.5);
+            border-radius: 60px;
+            padding: 12px 24px;
+            display: inline-block;
+            font-size: 1.3rem;
+            color: #fbeef2;
+            font-weight: bold;
+        }
+
+        .unlock-note {
+            font-size: 0.9rem;
+            color: #b34163;
+            margin-top: 15px;
+            font-style: italic;
+            background: rgba(255,255,240,0.5);
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 40px;
+        }
+
+        .small-note {
+            margin-top: 25px;
+            font-size: 0.85rem;
+            color: #a13554;
+            background: rgba(255,255,245,0.5);
+            display: inline-block;
+            padding: 6px 18px;
+            border-radius: 50px;
+            backdrop-filter: blur(2px);
+        }
+
+        footer {
+            margin-top: 20px;
+            font-size: 0.7rem;
+            color: #ac5976;
+        }
+
+        @media (max-width: 550px) {
+            .time-number { font-size: 2.2rem; }
+            .time-block { min-width: 65px; padding: 10px 6px; }
+            .container { padding: 20px 15px; }
+            h1 { font-size: 1.6rem; }
+            .place-details { font-size: 1rem; padding: 8px 15px; }
+            .locked { font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="stars" id="stars"></div>
+<div class="container">
+    <div class="heart-icon">💖💗💖</div>
+    <h1>Секретное приглашение ❤️</h1>
+    <div class="message">
+        Для самой-самой красивой девочки!<br>
+        Мы давно вместе, но пусть волнение будет как в первый раз.
+    </div>
+
+    <div class="timer">
+        <div class="time-block">
+            <div class="time-number" id="days">00</div>
+            <div class="time-label">Дней</div>
+        </div>
+        <div class="time-block">
+            <div class="time-number" id="hours">00</div>
+            <div class="time-label">Часов</div>
+        </div>
+        <div class="time-block">
+            <div class="time-number" id="minutes">00</div>
+            <div class="time-label">Минут</div>
+        </div>
+        <div class="time-block">
+            <div class="time-number" id="seconds">00</div>
+            <div class="time-label">Секунд</div>
+        </div>
+    </div>
+
+    <div class="secret-place" id="secretBlock">
+        <h3>✨ Место нашего свидания ✨</h3>
+        <div id="placeDisplay" class="locked">🔒 Секрет 🔒</div>
+        <div class="unlock-note" id="unlockMessage">
+            ⏳ Таймер дойдёт до нуля — и ты всё узнаешь ровно за день до свидания!
+        </div>
+    </div>
+
+    <div class="small-note">
+        🌹 Мой самый сладкий секрет — это ты. И этот вечер будет волшебным 🌹
+    </div>
+    <footer>★ сделано с любовью ★</footer>
+</div>
+
+<script>
+    // ❗❗❗ НАСТРОЙКИ (ПОМЕНЯЙ ЭТИ ДАТЫ) ❗❗❗
+    // ДЕНЬ СВИДАНИЯ (когда нужно встретиться) — вот сюда ставь реальную дату
+    const dateOfDate = new Date(2026, 4, 25, 16, 23, 1); // 28 мая 2026, 19:00
+    // ВНИМАНИЕ: месяц в JS идёт с 0 (0-январь, 4-май)
+
+    // ТЕКСТ МЕСТА (что откроется за день до свидания)
+    const placeName = "🍷 ТРЦ Изумрудный город, Комсомольский проспект, жду у главного входа 🍷";
+
+    // -----------------------------------------------------------------
+    const revealDate = new Date(dateOfDate);
+    revealDate.setDate(dateOfDate.getDate() - 1);
+    revealDate.setHours(0, 0, 0, 0);
+
+    const placeElement = document.getElementById('placeDisplay');
+    const unlockMsgSpan = document.getElementById('unlockMessage');
+
+    function updateTimer() {
+        const now = new Date().getTime();
+        const targetTime = dateOfDate.getTime();
+        const distance = targetTime - now;
+
+        if (distance < 0) {
+            document.getElementById('days').innerHTML = "00";
+            document.getElementById('hours').innerHTML = "00";
+            document.getElementById('minutes').innerHTML = "00";
+            document.getElementById('seconds').innerHTML = "00";
+            placeElement.innerHTML = `<span class="place-details">✨ Наше свидание будет 26 мая в 19:40, во вторник! ✨<br>${placeName}</span>`;
+            placeElement.classList.remove('locked');
+            unlockMsgSpan.innerHTML = "❤️ Наше свидание во вторник! С нетерпением жду встречи ❤️";
+            return;
+        }
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (86400000)) / (3600000));
+        const minutes = Math.floor((distance % 3600000) / 60000);
+        const seconds = Math.floor((distance % 60000) / 1000);
+
+        document.getElementById('days').innerHTML = days < 10 ? '0' + days : days;
+        document.getElementById('hours').innerHTML = hours < 10 ? '0' + hours : hours;
+        document.getElementById('minutes').innerHTML = minutes < 10 ? '0' + minutes : minutes;
+        document.getElementById('seconds').innerHTML = seconds < 10 ? '0' + seconds : seconds;
+
+        const nowDateOnly = new Date();
+        nowDateOnly.setHours(0,0,0,0);
+
+        if (nowDateOnly >= revealDate) {
+            placeElement.innerHTML = `<span class="place-details">🗺️ ${placeName}</span>`;
+            placeElement.classList.remove('locked');
+            unlockMsgSpan.innerHTML = "🎉 Теперь ты знаешь, куда мы идём! Остался всего один день до нашей встречи 🎉";
+        } else {
+            placeElement.innerHTML = "🔒 Тайна откроется ровно за день до свидания 🔒";
+            placeElement.classList.add('locked');
+            const daysToReveal = Math.ceil((revealDate - nowDateOnly) / (1000 * 60 * 60 * 24));
+            unlockMsgSpan.innerHTML = `⏳ Интрига сохранится ещё ${daysToReveal} ${getDayWord(daysToReveal)}. А потом ты узнаешь место! 💌`;
+        }
+    }
+
+    function getDayWord(n) {
+        if (n % 10 === 1 && n % 100 !== 11) return "день";
+        if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return "дня";
+        return "дней";
+    }
+
+    function createStars() {
+        const starsContainer = document.getElementById('stars');
+        starsContainer.innerHTML = '';
+        for (let i = 0; i < 140; i++) {
+            const star = document.createElement('div');
+            star.classList.add('star');
+            const size = Math.random() * 4 + 1;
+            star.style.width = `${size}px`;
+            star.style.height = `${size}px`;
+            star.style.left = `${Math.random() * 100}%`;
+            star.style.top = `${Math.random() * 100}%`;
+            star.style.animationDelay = `${Math.random() * 4}s`;
+            star.style.animationDuration = `${Math.random() * 2 + 1.5}s`;
+            starsContainer.appendChild(star);
+        }
+    }
+
+    createStars();
+    updateTimer();
+    setInterval(updateTimer, 1000);
+</script>
+</body>
+</html>
