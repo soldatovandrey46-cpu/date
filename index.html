@@ -43,7 +43,7 @@
 
         .star {
             position: absolute;
-            background-color: #ffb7c5; /* розовые звёздочки */
+            background-color: #ffb7c5;
             border-radius: 50%;
             opacity: 0.7;
             animation: twinkle 2s infinite alternate;
@@ -265,38 +265,47 @@
 </div>
 
 <script>
-    // ❗❗❗ НАСТРОЙКИ (ПОМЕНЯЙ ЭТИ ДАТЫ) ❗❗❗
-    // ДЕНЬ СВИДАНИЯ (когда нужно встретиться) — вот сюда ставь реальную дату
-    const dateOfDate = new Date(2026, 4, 25, 16, 23, 1); // 28 мая 2026, 19:00
-    // ВНИМАНИЕ: месяц в JS идёт с 0 (0-январь, 4-май)
+    // ============================================================
+    // ⭐ НАСТРОЙКИ (ПОМЕНЯЙ ЭТИ ДАТЫ ПОД СЕБЯ) ⭐
+    // ============================================================
+    // ДЕНЬ СВИДАНИЯ (когда нужно встретиться)
+    // Месяц в JS идёт с 0: 0-январь, 1-февраль, 2-март, 3-апрель, 4-май, 5-июнь и т.д.
+    const dateOfDate = new Date(2026, 4, 25, 16, 23, 1); // 25 мая 2026, 16:23:01
 
     // ТЕКСТ МЕСТА (что откроется за день до свидания)
-    const placeName = "🍷 ТРЦ Изумрудный город, Комсомольский проспект, жду у главного входа 🍷";
+    const placeName = "🍷 ТРЦ Изумрудный город, Комсомольский проспект, жду у главного входа в 19:40🍷";
+    // ============================================================
 
-    // -----------------------------------------------------------------
-    const revealDate = new Date(dateOfDate);
-    revealDate.setDate(dateOfDate.getDate() - 1);
-    revealDate.setHours(0, 0, 0, 0);
+    // Дата, когда откроется место (ровно за 24 часа до свидания)
+    const revealDate = new Date(dateOfDate.getTime() - (24 * 60 * 60 * 1000));
 
     const placeElement = document.getElementById('placeDisplay');
     const unlockMsgSpan = document.getElementById('unlockMessage');
+
+    function getDayWord(n) {
+        if (n % 10 === 1 && n % 100 !== 11) return "день";
+        if ([2, 3, 4].includes(n % 10) && ![12, 13, 14].includes(n % 100)) return "дня";
+        return "дней";
+    }
 
     function updateTimer() {
         const now = new Date().getTime();
         const targetTime = dateOfDate.getTime();
         const distance = targetTime - now;
 
+        // Если свидание уже прошло
         if (distance < 0) {
             document.getElementById('days').innerHTML = "00";
             document.getElementById('hours').innerHTML = "00";
             document.getElementById('minutes').innerHTML = "00";
             document.getElementById('seconds').innerHTML = "00";
-            placeElement.innerHTML = `<span class="place-details">✨ Наше свидание будет 26 мая в 19:40, во вторник! ✨<br>${placeName}</span>`;
+            placeElement.innerHTML = `<span class="place-details">✨ Наше свидание во вторник ✨<br>${placeName}</span>`;
             placeElement.classList.remove('locked');
-            unlockMsgSpan.innerHTML = "❤️ Наше свидание во вторник! С нетерпением жду встречи ❤️";
+            unlockMsgSpan.innerHTML = "❤️ Люблю тебя очень и очень ❤️";
             return;
         }
 
+        // Расчёт дней, часов, минут, секунд
         const days = Math.floor(distance / (1000 * 60 * 60 * 24));
         const hours = Math.floor((distance % (86400000)) / (3600000));
         const minutes = Math.floor((distance % 3600000) / 60000);
@@ -307,25 +316,22 @@
         document.getElementById('minutes').innerHTML = minutes < 10 ? '0' + minutes : minutes;
         document.getElementById('seconds').innerHTML = seconds < 10 ? '0' + seconds : seconds;
 
-        const nowDateOnly = new Date();
-        nowDateOnly.setHours(0,0,0,0);
-
-        if (nowDateOnly >= revealDate) {
+        // ✅ ИСПРАВЛЕННОЕ СРАВНЕНИЕ: показываем место, когда наступило время revealDate
+        if (now >= revealDate.getTime()) {
+            // Место открыто
             placeElement.innerHTML = `<span class="place-details">🗺️ ${placeName}</span>`;
             placeElement.classList.remove('locked');
             unlockMsgSpan.innerHTML = "🎉 Теперь ты знаешь, куда мы идём! Остался всего один день до нашей встречи 🎉";
         } else {
+            // Место скрыто
             placeElement.innerHTML = "🔒 Тайна откроется ровно за день до свидания 🔒";
             placeElement.classList.add('locked');
-            const daysToReveal = Math.ceil((revealDate - nowDateOnly) / (1000 * 60 * 60 * 24));
+
+            // Считаем дни до раскрытия (округляем вверх)
+            const msPerDay = 1000 * 60 * 60 * 24;
+            const daysToReveal = Math.ceil((revealDate.getTime() - now) / msPerDay);
             unlockMsgSpan.innerHTML = `⏳ Интрига сохранится ещё ${daysToReveal} ${getDayWord(daysToReveal)}. А потом ты узнаешь место! 💌`;
         }
-    }
-
-    function getDayWord(n) {
-        if (n % 10 === 1 && n % 100 !== 11) return "день";
-        if ([2,3,4].includes(n % 10) && ![12,13,14].includes(n % 100)) return "дня";
-        return "дней";
     }
 
     function createStars() {
